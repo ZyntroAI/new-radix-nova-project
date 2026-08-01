@@ -1,0 +1,21 @@
+- uses: github/codeql-action/init@v4
+  with:
+    registries: |
+      # URL to the container registry, usually in this format
+      - url: https://containers.GHEHOSTNAME1/v2/
+
+        # List of package glob patterns to be found at this registry
+        packages:
+          - my-company/*
+          - my-company2/*
+
+        # Token, which should be stored as a secret
+        token: ${{ secrets.GHEHOSTNAME1_TOKEN }}
+
+      # URL to the default container registry
+      - url: https://ghcr.io/v2/
+        # Packages can also be a string
+        packages: "*/*"
+        token: ${{ secrets.GHCR_TOKEN }}
+
+    
