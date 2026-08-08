@@ -18,7 +18,7 @@ A modern Next.js project bootstrapped with [v0](https://v0.app), featuring Radix
 ### Installation
 
 ```bash
-git clone https://github.com/zyntromedia/new-radix-nova-project.git
+git clone https://github.com/ZyntroAI/new-radix-nova-project.git
 cd new-radix-nova-project
 npm install
 ```
