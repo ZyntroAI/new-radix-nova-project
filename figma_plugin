@@ -1,0 +1,133 @@
+Building a high-performance Figma Plugin requires two core files: manifest.json (configuration), code.ts (access to the Figma document sandbox), and an optional ui.html (for custom user interface interactions).
+Here is a ready-to-run architecture and script framework for a custom Figma Design Tools & Token Automation Plugin.
+1. Project Setup (manifest.json)
+{
+  "name": "Design Tokens & Utility Builder",
+  "id": "1234567890123456789",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "editorType": ["figma"],
+  "capabilities": [],
+  "enableProposedApi": false
+}
+
+2. Main Plugin Logic (code.ts / code.js)
+This main thread script executes directly within the Figma canvas document context. It reads selected design nodes, extracts styles/variables, converts colors, and generates code tokens or UI layouts.
+// Enable Figma UI window
+figma.showUI(__html__, { width: 380, height: 500, title: "Design Tool Script Engine" });
+
+// Listen for messages from the HTML UI
+figma.ui.onmessage = async (msg) => {
+  
+  // 1. Create Design Token Collection & Variables
+  if (msg.type === 'create-tokens') {
+    const { primaryHex, borderRadius } = msg.data;
+    
+    // Create or get local variable collection
+    const collection = figma.variables.createVariableCollection("System Tokens");
+    const modeId = collection.modes[0].modeId;
+
+    // Create Primary Color Token
+    const colorVar = figma.variables.createVariable("color/primary", collection, "COLOR");
+    const rgb = hexToRgb(primaryHex);
+    colorVar.setValueForMode(modeId, { r: rgb.r / 255, g: rgb.g / 255, b: rgb.b / 255, a: 1 });
+
+    // Create Border Radius Token (Number Variable)
+    const radiusVar = figma.variables.createVariable("radius/base", collection, "FLOAT");
+    radiusVar.setValueForMode(modeId, parseFloat(borderRadius));
+
+    figma.notify("✅ Design Variables successfully generated!");
+  }
+
+  // 2. Automate Layout & Component Insertion
+  if (msg.type === 'generate-card') {
+    const selection = figma.currentPage.selection;
+    
+    // Create Auto-Layout Frame
+    const frame = figma.createFrame();
+    frame.name = "Auto-Layout Card";
+    frame.layoutMode = "VERTICAL";
+    frame.paddingLeft = 24;
+    frame.paddingRight = 24;
+    frame.paddingTop = 24;
+    frame.paddingBottom = 24;
+    frame.itemSpacing = 16;
+    frame.cornerRadius = 12;
+    frame.resize(320, 200);
+
+    // Apply Solid Fill
+    frame.fills = [{ type: 'SOLID', color: { r: 0.98, g: 0.98, b: 0.98 } }];
+
+    // Add Title Node
+    await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+    const titleText = figma.createText();
+    titleText.fontName = { family: "Inter", style: "Bold" };
+    titleText.characters = "Automated Component";
+    titleText.fontSize = 18;
+    frame.appendChild(titleText);
+
+    // Position on canvas
+    figma.currentPage.appendChild(frame);
+    figma.viewport.scrollAndZoomIntoView([frame]);
+  }
+};
+
+// Helper: Hex to RGB Conversion
+function hexToRgb(hex: string) {
+  const cleanHex = hex.replace('#', '');
+  const bigint = parseInt(cleanHex, 16);
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255
+  };
+}
+
+3. Plugin UI (ui.html)
+This front-end runs inside an iframe inside Figma, sending commands back to code.ts via parent.postMessage.
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Inter, sans-serif; padding: 16px; margin: 0; background: #fafafa; font-size: 13px; }
+    .group { margin-bottom: 16px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+    input[type="text"], input[type="color"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    button { width: 100%; background: #18A0FB; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+    button:hover { background: #0d8de3; }
+    .secondary { background: #333; }
+    .secondary:hover { background: #222; }
+  </style>
+</head>
+<body>
+  <div class="group">
+    <label>Primary Brand Color</label>
+    <input type="color" id="primaryColor" value="#18A0FB">
+  </div>
+  <div class="group">
+    <label>Base Radius (px)</label>
+    <input type="text" id="baseRadius" value="12">
+  </div>
+
+  <button id="btnTokens">Generate Figma Variables</button>
+  <button id="btnCard" class="secondary">Build Auto-Layout Component</button>
+
+  <script>
+    document.getElementById('btnTokens').onclick = () => {
+      const primaryHex = document.getElementById('primaryColor').value;
+      const borderRadius = document.getElementById('baseRadius').value;
+      parent.postMessage({ pluginMessage: { type: 'create-tokens', data: { primaryHex, borderRadius } } }, '*');
+    };
+
+    document.getElementById('btnCard').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'generate-card' } }, '*');
+    };
+  </script>
+</body>
+</html>
+
+4. Key Plugin Capabilities Included
+ * Native Variable System Integration: Automates modern Figma Variables (Color, Float/Number, String) rather than legacy styles.
+ * Auto-Layout Construction: Programmatically constructs vertical/horizontal layout frames with auto-padding and spacing properties.
+ * Async Font Ingestion: Safely loads design fonts using figma.loadFontAsync() prior to text manipulation.
