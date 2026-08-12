@@ -1,0 +1,19 @@
+When building a GitHub Actions monitoring application using the GitHub REST API, adhering to established best practices ensures your app remains performant, resilient, and compliant with rate limits.
+1. 🌐 API Architecture & Request Handling
+ * Use Webhooks Instead of Polling: Avoid continuously polling workflow run endpoints. Instead, configure GitHub Webhooks to listen for events like workflow_run or workflow_job. This triggers updates in real-time and prevents you from burning through your rate limit.
+ * Respect Rate Limits & Headers: Authenticated requests grant a higher rate limit (typically 5,000 requests/hour). Always monitor response headers (X-RateLimit-Remaining and X-RateLimit-Reset). If you hit a 429 or secondary rate limit, respect the Retry-After header using exponential backoff.
+ * Handle Pagination Correctly: Never hardcode pagination or guess URL structures. Use the Link response headers provided by GitHub to traverse through large lists of workflow runs or job logs safely.
+2. 📊 Monitoring GitHub Actions Efficiently
+ * Target Specific Endpoints: When tracking CI/CD health, focus on lightweight metadata endpoints rather than downloading full logs unless necessary:
+   * GET /repos/{owner}/{repo}/actions/runs to list workflow runs.
+   * GET /repos/{owner}/{repo}/actions/runs/{run_id} for specific run statuses.
+   * GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs to inspect individual job/step failures.
+ * Stream Logs Sparingly: Downloading raw text logs (GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs) is resource-heavy. Cache log summaries or fetch them on-demand only when a user explicitly requests to debug a failed workflow.
+3. 🛡️ Authentication & App Security
+ * Deploy a GitHub App: Instead of using personal access tokens (PATs), build your solution as a GitHub App. GitHub Apps provide granular permissions (e.g., Read-only access to Actions and Metadata) and scale better for organizational use.
+ * Secure Token Management: Never hardcode credentials. Store installation access tokens securely and let your backend handle automatic token rotation before they expire (tokens typically last 1 hour).
+🔍 Recommended Next Steps
+To help tailor this architecture to your exact stack, how would you like to proceed?
+ * ⚙️ Webhook Configuration: Setting up event payloads for real-time pipeline status tracking.
+ * 🗄️ Database Schema Design: Structuring storage for historical workflow runs and failure metrics.
+ * 💻 Code Implementation: Writing a sample service (e.g., Node.js or Python) to fetch and parse workflow run statuses.
