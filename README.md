@@ -1,83 +1,80 @@
-# new-radix-nova-project
+## What this is
+A Next.js (App Router) TypeScript web app scaffold that provides an AI-assisted UI built with Radix UI + Tailwind CSS and a small backend of API routes for chat/AI features — intended for developers building an interactive, component-driven UI with TypeScript-first tooling.
 
-A modern Next.js project bootstrapped with [v0](https://v0.app), featuring Radix UI components, Tailwind CSS styling, and TypeScript for type safety.
+### Stack
+- **Language(s):** TypeScript (primary), CSS (Tailwind), small JS surface
+- **Framework / runtime:** Next.js (App Router / app/), React
+- **Notable libraries:** Tailwind CSS, Radix UI (Radix-based components & UI patterns), shadcn-style/component patterns (theme-provider + component folder), TypeScript
 
-## Quick Links
+## How it's organized
+```
+README.md                — repo overview, install & dev instructions
+INSTALL.md, SETUP.md     — setup and environment notes
+app/                     — Next.js App Router app; pages/layout + server/client components + API routes
+  page.tsx               — simple home page component
+  layout.tsx             — root layout (imports ThemeProvider from components)
+  globals.css            — global styles (Tailwind + custom vars)
+  api/
+    ai/route.ts          — AI-related server route
+    chat/route.ts        — chat API route
+backend/                 — (backend services / server-side code; runtime pieces)
+components/              — UI components and theme-provider used by app/
+components.json          — component metadata
+lib/                     — small library code used by app (shared helpers)
+public/                  — static assets
+src/
+  store/
+    kpi.ts               — small client-side state/store (KPI/example)
+.next / pnpm-lock.yaml   — build lockfiles / Next build artifacts
+tailwind.config.ts       — Tailwind configuration
+next.config.mjs          — Next.js configuration
+package.json             — scripts and dependency pins
+.workflows/              — CI workflows (automation)
+.docs, docs/             — additional documentation / guides
+```
 
-- **🚀 [Installation Guide](./INSTALL.md)** - Get up and running in minutes
-- **⚙️ [Setup Guide](./SETUP.md)** - Configure your development environment
-- **🔗 [Continue on v0](https://v0.app/chat/projects/prj_Xx8jZ4X8FSlcobnA0R0kx48ruvBo)** - Edit components with AI assistance
+How it fits together:
+- The app/ directory is the runtime: layout.tsx wraps pages with a ThemeProvider from components/, page.tsx is the UI entry. API endpoints live under app/api (ai and chat) and provide server-side logic for AI and chat functionality. UI is composed from components/ and styled via Tailwind (tailwind.config.ts + globals.css). Small client state lives under src/store (kpi.ts). package.json scripts drive dev/build/test flows and pnpm-lock.yaml indicates pnpm is used in CI/development.
 
-## Getting Started
+## How to run it
+Minimum quick path (repo includes pnpm lock; pnpm recommended):
 
-### Prerequisites
-
-- **Node.js** v18.17.0 or later
-- **npm**, **yarn**, or **pnpm**
-
-### Installation
-
-```bash
-git clone https://github.com/ZyntroAI/new-radix-nova-project.git
+1) Clone and install
+```
+git clone https://github.com/zyntromedia/new-radix-nova-project.git
 cd new-radix-nova-project
-npm install
+# using pnpm (preferred because pnpm-lock.yaml exists)
+pnpm install
+# or with npm:
+# npm install
 ```
 
-### Start Development
-
-```bash
-npm run dev
+2) Start dev server
+```
+pnpm dev
+# or
+# npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Available Commands
-
-```bash
-npm run dev        # Start development server with Turbopack
-npm run build      # Build for production
-npm start          # Run production build
-npm run lint       # Run ESLint
-npm run format     # Format with Prettier
-npm run typecheck  # TypeScript type checking
+3) Build / start for production
+```
+pnpm build
+pnpm start
+# or
+# npm run build
+# npm run start
 ```
 
-## Technology Stack
+Notes / required env:
+- Node.js 18+ is expected (README lists a Node prereq).
+- The app includes AI/chat API routes; you will need provider API keys / secrets (e.g., OpenAI/Anthropic or whatever your ai route expects) configured as environment variables — check app/api/ai/route.ts and AGENTS.md / CLAUDE.md for the exact variables the server expects.
+- If you use pnpm in CI, ensure the runner supports pnpm or use npm with the lock conversion step.
 
-| Technology | Purpose |
-|-----------|---------|
-| [Next.js 16](https://nextjs.org) | React framework with SSR/SSG |
-| [React 19](https://react.dev) | UI library |
-| [Radix UI](https://www.radix-ui.com/) | Headless UI components |
-| [Tailwind CSS](https://tailwindcss.com) | Utility-first styling |
-| [TypeScript](https://www.typescriptlang.org/) | Type safety |
-| [shadcn/ui](https://ui.shadcn.com/) | Pre-built Radix components |
-| [Recharts](https://recharts.org/) | Data visualization |
-| [Lucide React](https://lucide.dev/) | Icon library |
+## Try asking
+- "Can you audit app/api/ai/route.ts for places where API keys or user input are forwarded to external AI providers and recommend safer handling?"
+- "List all Radix UI components used by the app — can you map them to files in components/ and show where they’re imported (e.g., in app/layout.tsx or pages)?"
+- "Walk me through adding an .env.example with the environment variables (names and purpose) required by app/api/chat/route.ts and app/api/ai/route.ts so new devs can run locally."
 
-## Project Structure
-
-```
-new-radix-nova-project/
-├── app/                     # Next.js app directory
-│   ├── page.tsx            # Home page
-│   └── layout.tsx          # Root layout
-├── components/             # React components
-│   ├── ui/                 # Radix UI wrapped components
-│   └── ...                 # Feature components
-├── lib/                    # Utilities and helpers
-├── package.json
-├── tsconfig.json
-├── tailwind.config.ts
-├── INSTALL.md              # Installation guide
-├── SETUP.md                # Configuration guide
-└── README.md               # This file
-```
-
-## Development Workflow
-
-1. **Edit pages** in `app/` - changes hot-reload automatically
-2. **Create components** in `components/` and import them
 3. **Style with Tailwind** - use utility classes
 4. **Type safely** with TypeScript
 5. **Run checks** before committing:
