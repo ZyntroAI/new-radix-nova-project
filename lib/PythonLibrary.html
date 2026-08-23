@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Library - pure-agent-dev</title>
+  <meta
+    name="description"
+    content="Python libraries and recommended architecture for FastAPI, AI Agent, Schema and CI/CD projects."
+  >
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.7;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      color: #222;
+      background: #f7f7f7;
+    }
+
+    main {
+      background: #fff;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1, h2 {
+      color: #111;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #f0f0f0;
+    }
+
+    pre {
+      background: #111;
+      color: #eee;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    .section {
+      margin-top: 36px;
+    }
+
+    .note {
+      padding: 16px;
+      border-left: 4px solid #555;
+      background: #f3f3f3;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <header>
+      <h1>Python Library</h1>
+
+      <p>
+        <strong>ไทย:</strong>
+        Python Library คือชุดโค้ดที่ติดตั้งแล้วนำมา
+        <code>import</code>
+        ใช้งานในโปรเจกต์ได้
+      </p>
+
+      <p>
+        <strong>English:</strong>
+        A Python library is reusable code distributed as a package
+        that an application can install and import.
+      </p>
+    </header>
+
+    <section class="section">
+      <h2>Recommended Python Libraries</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Library</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><code>fastapi</code></td>
+            <td>REST API</td>
+          </tr>
+
+          <tr>
+            <td><code>pydantic</code></td>
+            <td>Schema / validation</td>
+          </tr>
+
+          <tr>
+            <td><code>httpx</code></td>
+            <td>Async HTTP client</td>
+          </tr>
+
+          <tr>
+            <td><code>sqlalchemy</code></td>
+            <td>Database ORM</td>
+          </tr>
+
+          <tr>
+            <td><code>alembic</code></td>
+            <td>Database migration</td>
+          </tr>
+
+          <tr>
+            <td><code>pytest</code></td>
+            <td>Testing</td>
+          </tr>
+
+          <tr>
+            <td><code>ruff</code></td>
+            <td>Linting and formatting</td>
+          </tr>
+
+          <tr>
+            <td><code>mypy</code></td>
+            <td>Static type checking</td>
+          </tr>
+
+          <tr>
+            <td><code>pyyaml</code></td>
+            <td>YAML parsing</td>
+          </tr>
+
+          <tr>
+            <td><code>jsonschema</code></td>
+            <td>JSON Schema validation</td>
+          </tr>
+
+          <tr>
+            <td><code>tenacity</code></td>
+            <td>Retry and backoff</td>
+          </tr>
+
+          <tr>
+            <td><code>structlog</code></td>
+            <td>Structured logging</td>
+          </tr>
+
+          <tr>
+            <td><code>python-dotenv</code></td>
+            <td>Load <code>.env</code> configuration</td>
+          </tr>
+
+          <tr>
+            <td><code>boto3</code></td>
+            <td>AWS SDK</td>
+          </tr>
+
+          <tr>
+            <td><code>kubernetes</code></td>
+            <td>Kubernetes API client</td>
+          </tr>
+
+          <tr>
+            <td><code>openai</code></td>
+            <td>OpenAI API</td>
+          </tr>
+
+          <tr>
+            <td><code>google-genai</code></td>
+            <td>Gemini API</td>
+          </tr>
+
+          <tr>
+            <td><code>redis</code></td>
+            <td>Cache / queue</td>
+          </tr>
+
+          <tr>
+            <td><code>celery</code></td>
+            <td>Background and distributed tasks</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>Recommended Architecture</h2>
+
+      <p>
+        สำหรับ architecture ที่ใช้
+        <strong>FastAPI + AI Agent + Schema + CI/CD</strong>
+        สามารถจัดโครงสร้าง package ได้ดังนี้
+      </p>
+
+      <pre><code>pure-agent-dev/
+├── pyproject.toml
+├── requirements.txt
+├── src/
+│   └── agent/
+│       ├── api/
+│       ├── schemas/
+│       ├── agents/
+│       ├── planners/
+│       ├── providers/
+│       └── services/
+└── tests/</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>Core Dependencies</h2>
+
+      <pre><code>fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+httpx
+pyyaml
+jsonschema
+tenacity
+structlog
+pytest
+pytest-asyncio
+ruff
+mypy</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>Architecture Components</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Responsibility</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><code>api/</code></td>
+            <td>FastAPI routes and HTTP endpoints</td>
+          </tr>
+
+          <tr>
+            <td><code>schemas/</code></td>
+            <td>Pydantic models and JSON Schema definitions</td>
+          </tr>
+
+          <tr>
+            <td><code>agents/</code></td>
+            <td>AI agent implementations</td>
+          </tr>
+
+          <tr>
+            <td><code>planners/</code></td>
+            <td>Task planning and execution strategies</td>
+          </tr>
+
+          <tr>
+            <td><code>providers/</code></td>
+            <td>External AI, cloud and infrastructure providers</td>
+          </tr>
+
+          <tr>
+            <td><code>services/</code></td>
+            <td>Business logic and application services</td>
+          </tr>
+
+          <tr>
+            <td><code>tests/</code></td>
+            <td>Unit, integration and API tests</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>Installation</h2>
+
+      <pre><code>python -m venv .venv
+
+# Linux / macOS
+source .venv/bin/activate
+
+# Windows
+.venv\Scripts\activate
+
+pip install -r requirements.txt</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>Development Commands</h2>
+
+      <pre><code># Run API
+uvicorn agent.main:app --reload
+
+# Run tests
+pytest
+
+# Lint
+ruff check .
+
+# Format
+ruff format .
+
+# Type checking
+mypy src/</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>Python Package Installation</h2>
+
+      <p>
+        หากโปรเจกต์ใช้ <code>pyproject.toml</code>
+        สามารถติดตั้ง package ใน editable mode ได้
+      </p>
+
+      <pre><code>pip install -e .</code></pre>
+
+      <div class="note">
+        <strong>Design principle:</strong>
+        แยก API, Schema, Agent, Planner, Provider และ Service
+        ออกจากกัน เพื่อไม่ให้ business logic, AI provider และ HTTP layer
+        กลายเป็นก้อนเดียวที่แก้ทีหนึ่งแล้วพังอีกสามสิบจุด
+      </div>
+    </section>
+
+    <footer class="section">
+      <p>
+        <strong>English:</strong>
+        This structure keeps HTTP handling, schemas, agent logic,
+        planning, providers and business services independently testable
+        and replaceable.
+      </p>
+    </footer>
+  </main>
+</body>
+</html></code```
