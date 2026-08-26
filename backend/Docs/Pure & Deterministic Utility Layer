@@ -1,0 +1,7 @@
+Pure & Deterministic Utility Layer (src/utils/)
+Mechanism: Code within src/utils/ is written as pure, stateless TypeScript modules free from side effects or external framework couplings (e.g., Express, React, ORMs).
+Guarantees:
+Determinism: Given input , output is strictly  every time.
+Testability: Fast execution of unit tests without mock servers or database connections.
+Reusability: Shared execution compatibility across Node.js server engines, browser contexts, and CLI utilities.
+
