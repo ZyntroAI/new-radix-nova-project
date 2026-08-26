@@ -1,0 +1,10 @@
+Verification, Testing & Operational Protocol
+Follow this checklist to validate system operational health before pushing changes across branches:
+1. Kustomize Overlay Manifest Validation
+Render and inspect environment-specific Kubernetes manifests locally before committing:
+# Render and inspect Dev Overlay
+kubectl kustomize manifests/overlays/dev/
+
+# Render and inspect Production Overlay
+kubectl kustomize manifests/overlays/prod/
+
