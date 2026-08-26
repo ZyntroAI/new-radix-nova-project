@@ -1,0 +1,4 @@
+Automated Semantic Release Engine & Version Pinning
+Mechanism: The shell script (scripts/gitflow-release.sh) automates non-fast-forward (--no-ff) merges between release/*, main, and develop while forcing annotated Git tags on main.
+Benefit: Establishes strict semantic versioning (vX.Y.Z) and ensures all production container images map 1-to-1 with immutable Git commit SHAs.
+
