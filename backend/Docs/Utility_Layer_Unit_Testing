@@ -1,0 +1,5 @@
+Utility Layer Unit Testing
+Execute test suites to verify pure logic and edge-case behavior:
+# Run tests with coverage targeting the utils module
+npm test -- src/utils/logger.test.ts --coverage
+
