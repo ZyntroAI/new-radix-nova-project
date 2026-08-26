@@ -1,0 +1,4 @@
+mkdir test_directory && cd test_directory
+
+# Create file with command injection payload in filename
+touch '$(touch injected_poc)'
