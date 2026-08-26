@@ -1,0 +1,4 @@
+End-to-End Local Cluster Dry-Run
+Apply manifests in dry-run mode against a minikube/kind local Kubernetes cluster:
+kubectl apply -k manifests/overlays/prod/ --dry-run=client
+
