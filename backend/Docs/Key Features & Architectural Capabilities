@@ -1,0 +1,8 @@
+Key Features & Architectural Capabilities
+Feature 1: Zero-Downtime Rolling Deployments via Health Probes
+Mechanism: Kubernetes uses readinessProbe to evaluate when a pod is ready to serve network traffic and livenessProbe to detect hung or deadlocked processes.
+Probes Configuration:
+Readiness: Endpoint /healthz polled every 10 seconds. Pod remains out of Service endpoint pools until a 200 OK response is received.
+Liveness: Endpoint /healthz polled every 15 seconds. Pod is restarted automatically if it fails 3 consecutive checks.
+Benefit: Ensures seamless deployment rollouts where traffic is routed to new pods only after they have successfully booted and verified internal state.
+
