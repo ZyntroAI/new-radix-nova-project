@@ -1,0 +1,4 @@
+Hybrid Stateful/Stateless Topology
+Mechanism: Web and API instances run as stateless Deployments scaled horizontally based on metric thresholds, while database instances (MongoDB/PostgreSQL) run as StatefulSets with persistent volume claims (PVCs).
+Benefit: High availability for stateless API nodes with predictable persistent storage ordering and identity for data nodes.
+
