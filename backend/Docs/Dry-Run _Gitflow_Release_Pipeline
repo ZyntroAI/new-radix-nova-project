@@ -1,0 +1,11 @@
+Dry-Run Gitflow Release Pipeline
+Simulate the automation script for feature and release branch creation:
+# 1. Start a feature branch
+bash scripts/gitflow-release.sh feature-start JIRA-101-auth
+
+# 2. Start a release candidate
+bash scripts/gitflow-release.sh release-start v1.2.0
+
+# 3. Finalize release candidate (Must be on release/v1.2.0 branch)
+bash scripts/gitflow-release.sh release-finish v1.2.0
+
