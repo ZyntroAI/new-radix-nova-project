@@ -1,0 +1,9 @@
+Production Replica Count Patch (fullstack-k8s/manifests/overlays/prod/patches/replica-count.yaml)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-api
+  namespace: fullstack-app
+spec:
+  replicas: 5
+
