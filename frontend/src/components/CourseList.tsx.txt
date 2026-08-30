@@ -1,0 +1,46 @@
+/** 
+ * File: CourseList.tsx
+ * Purpose: List of courses; interacts with progress context to show progress.
+ */
+
+import React, { useContext } from 'react'
+import CourseCard from './CourseCard'
+import { ProgressContext } from '../contexts/ProgressContext'
+
+/**
+ * Component: CourseList
+ * Purpose: Render a grid of available courses with progress.
+ */
+const CourseList: React.FC<{ onOpen: (id: string) => void }> = ({ onOpen }) => {
+  const progressContext = useContext(ProgressContext)
+
+  // Mock course data (replace with API in future)
+  const courses = [
+    { id: 'course-1', title: 'React Fundamentals', instructor: 'Jane Doe' },
+    { id: 'course-2', title: 'Advanced TypeScript', instructor: 'John Smith' },
+    { id: 'course-3', title: 'Design Systems', instructor: 'Alex Johnson' },
+  ]
+
+  return (
+    <section>
+      <h2 className="text-lg font-semibold mb-4">Recommended Courses</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {courses.map(c => {
+          const entry = progressContext?.getProgress(c.id)
+          return (
+            <CourseCard
+              key={c.id}
+              id={c.id}
+              title={c.title}
+              instructor={c.instructor}
+              progress={entry?.percent ?? 0}
+              onOpen={onOpen}
+            />
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+export default CourseList

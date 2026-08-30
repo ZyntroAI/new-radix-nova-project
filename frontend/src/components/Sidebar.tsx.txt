@@ -1,0 +1,31 @@
+/** 
+ * File: Sidebar.tsx
+ * Purpose: Left sidebar with navigation and quick actions.
+ */
+
+import React from 'react'
+import { Home, Play, Award } from 'lucide-react'
+
+/**
+ * Component: Sidebar
+ * Purpose: Simple navigation sidebar for the platform.
+ */
+const Sidebar: React.FC = () => {
+  return (
+    <aside className="w-64 border-r bg-white p-4">
+      <nav className="flex flex-col gap-2">
+        <a className="flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-50">
+          <Home size={18} /> <span>Home</span>
+        </a>
+        <a className="flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-50">
+          <Play size={18} /> <span>My Courses</span>
+        </a>
+        <a className="flex items-center gap-3 px-3 py-2 rounded hover:bg-slate-50">
+          <Award size={18} /> <span>Certificates</span>
+        </a>
+      </nav>
+    </aside>
+  )
+}
+
+export default Sidebar

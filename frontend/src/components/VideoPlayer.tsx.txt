@@ -1,0 +1,152 @@
+/** 
+ * File: VideoPlayer.tsx
+ * Purpose: HTML5 video player with resume, progress reporting, speed control and fullscreen.
+ */
+
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { ProgressContext, ProgressEntry } from '../contexts/ProgressContext'
+
+/**
+ * Interface: VideoPlayerProps
+ * Purpose: Props for VideoPlayer component.
+ */
+interface VideoPlayerProps {
+  courseId: string
+  src: string
+  title?: string
+}
+
+/**
+ * Component: VideoPlayer
+ * Purpose: Handles playback and reports progress to ProgressContext in real time.
+ */
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ courseId, src, title }) => {
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const progressContext = useContext(ProgressContext)
+  const [playing, setPlaying] = useState(false)
+  const [speed, setSpeed] = useState(1)
+
+  // Restore saved progress on mount
+  useEffect(() => {
+    const entry = progressContext?.getProgress(courseId)
+    if (entry && videoRef.current) {
+      videoRef.current.currentTime = Math.max(0, Math.min(videoRef.current.duration || Infinity, entry.currentTime))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseId])
+
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+
+    let savingTimer: number | undefined
+
+    const onTimeUpdate = () => {
+      const percent = v.duration ? (v.currentTime / v.duration) * 100 : 0
+      // Debounce saves to localStorage to every 1s to reduce churn
+      if (savingTimer) window.clearTimeout(savingTimer)
+      savingTimer = window.setTimeout(() => {
+        const entry: ProgressEntry = {
+          updatedAt: new Date().toISOString(),
+          currentTime: v.currentTime,
+          percent: Number(percent.toFixed(2)),
+        }
+        progressContext?.setProgress(courseId, entry)
+      }, 800)
+    }
+
+    const onPlay = () => setPlaying(true)
+    const onPause = () => setPlaying(false)
+
+    v.addEventListener('timeupdate', onTimeUpdate)
+    v.addEventListener('play', onPlay)
+    v.addEventListener('pause', onPause)
+
+    return () => {
+      v.removeEventListener('timeupdate', onTimeUpdate)
+      v.removeEventListener('play', onPlay)
+      v.removeEventListener('pause', onPause)
+      if (savingTimer) window.clearTimeout(savingTimer)
+    }
+  }, [courseId, progressContext])
+
+  /**
+   * Function: togglePlay
+   * Purpose: Play or pause the video.
+   */
+  const togglePlay = async () => {
+    const v = videoRef.current
+    if (!v) return
+    if (v.paused) {
+      try {
+        await v.play()
+      } catch {
+        // autoplay policies may block; ignore
+      }
+    } else {
+      v.pause()
+    }
+  }
+
+  /**
+   * Function: setPlaybackSpeed
+   * Purpose: Adjust playback speed.
+   */
+  const setPlaybackSpeed = (s: number) => {
+    setSpeed(s)
+    if (videoRef.current) videoRef.current.playbackRate = s
+  }
+
+  /**
+   * Function: enterFullscreen
+   * Purpose: Request fullscreen for the video element.
+   */
+  const enterFullscreen = () => {
+    const el = videoRef.current
+    if (!el) return
+    if (el.requestFullscreen) el.requestFullscreen()
+  }
+
+  // Display saved percent
+  const savedPercent = progressContext?.getProgress(courseId)?.percent ?? 0
+
+  return (
+    <div className="bg-white rounded shadow-sm overflow-hidden">
+      <div className="bg-black relative">
+        <video
+          ref={videoRef}
+          src={src}
+          className="w-full max-h-[480px] object-contain bg-black"
+          controls
+          preload="metadata"
+          playsInline
+        />
+        <div className="absolute left-3 bottom-3 bg-black/60 text-white px-2 py-1 rounded text-sm">
+          {title ?? 'Lesson'} • {Math.round(savedPercent)}%
+        </div>
+      </div>
+      <div className="p-3 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <button onClick={togglePlay} className="px-3 py-1 bg-indigo-600 text-white rounded">
+            {playing ? 'Pause' : 'Play'}
+          </button>
+          <button onClick={enterFullscreen} className="px-3 py-1 border rounded">
+            Fullscreen
+          </button>
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="text-sm text-slate-600">Speed</label>
+          <select value={speed} onChange={e => setPlaybackSpeed(Number(e.target.value))} className="border rounded px-2 py-1">
+            <option value={0.75}>0.75x</option>
+            <option value={1}>1x</option>
+            <option value={1.25}>1.25x</option>
+            <option value={1.5}>1.5x</option>
+            <option value={2}>2x</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default VideoPlayer

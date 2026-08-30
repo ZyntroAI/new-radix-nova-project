@@ -1,0 +1,108 @@
+/** 
+ * File: CommunityFeed.tsx
+ * Purpose: Minimal community feed with local persistence and cross-tab sync.
+ */
+
+import React, { useEffect, useState } from 'react'
+
+/**
+ * Interface: Post
+ * Purpose: Simple post structure for the community feed.
+ */
+interface Post {
+  id: string
+  author: string
+  content: string
+  createdAt: string
+}
+
+const STORAGE_KEY = 'community_feed_v1'
+const CHANNEL = 'community_feed_channel'
+
+/**
+ * Component: CommunityFeed
+ * Purpose: Local community posts with multi-tab sync using BroadcastChannel + storage events.
+ */
+const CommunityFeed: React.FC = () => {
+  const [posts, setPosts] = useState<Post[]>(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      return raw ? (JSON.parse(raw) as Post[]) : []
+    } catch {
+      return []
+    }
+  })
+  const [text, setText] = useState('')
+  const [author, setAuthor] = useState('Learner')
+
+  useEffect(() => {
+    try {
+      const bc = new BroadcastChannel(CHANNEL)
+      const handler = (e: MessageEvent) => {
+        if (e.data?.type === 'posts_update') {
+          setPosts(e.data.payload || [])
+        }
+      }
+      bc.addEventListener('message', handler)
+      return () => bc.removeEventListener('message', handler)
+    } catch {
+      // ignore if not supported
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts))
+      const bc = new BroadcastChannel(CHANNEL)
+      bc.postMessage({ type: 'posts_update', payload: posts })
+      bc.close()
+    } catch {
+      // ignore
+    }
+  }, [posts])
+
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY && e.newValue) {
+        try {
+          setPosts(JSON.parse(e.newValue))
+        } catch {}
+      }
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
+
+  const submit = () => {
+    if (!text.trim()) return
+    const p: Post = { id: `p-${Date.now()}`, author, content: text.trim(), createdAt: new Date().toISOString() }
+    setPosts(prev => [p, ...prev])
+    setText('')
+  }
+
+  return (
+    <div className="bg-white rounded shadow-sm p-4">
+      <h3 className="font-semibold mb-2">Community</h3>
+      <div className="mb-3">
+        <input value={author} onChange={e=>setAuthor(e.target.value)} className="border px-2 py-1 rounded mr-2" />
+        <textarea value={text} onChange={e=>setText(e.target.value)} placeholder="Share a thought..." className="w-full border rounded px-2 py-1 mt-2" />
+        <div className="mt-2 flex justify-end">
+          <button onClick={submit} className="px-3 py-1 bg-indigo-600 text-white rounded">Post</button>
+        </div>
+      </div>
+      <div className="space-y-3">
+        {posts.map(p => (
+          <div key={p.id} className="border rounded p-2">
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-medium">{p.author}</div>
+              <div className="text-xs text-slate-500">{new Date(p.createdAt).toLocaleString()}</div>
+            </div>
+            <div className="text-sm mt-1">{p.content}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default CommunityFeed

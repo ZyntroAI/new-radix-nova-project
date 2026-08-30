@@ -1,0 +1,37 @@
+import { useState } from 'react';
+import { useAIStream } from './useAIStream';
+
+export default function ChatUI() {
+  const [prompt, setPrompt] = useState('');
+  const { data, isLoading, error } = useAIStream(prompt);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // trigger new stream by updating prompt
+    setPrompt(inputValue);
+  };
+
+  const [inputValue, setInputValue] = useState('');
+
+  return (
+    <div className="chat-container">
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={e => setInputValue(e.target.value)}
+          placeholder="Ask me something..."
+        />
+        <button type="submit" disabled={isLoading}>
+          Send
+        </button>
+      </form>
+
+      <div className="chat-output">
+        {isLoading && <p>Streaming response…</p>}
+        {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+        <p>{data}</p>
+      </div>
+    </div>
+  );
+}

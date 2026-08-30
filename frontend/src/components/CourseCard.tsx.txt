@@ -1,0 +1,48 @@
+/** 
+ * File: CourseCard.tsx
+ * Purpose: Display a single course card with progress indicator.
+ */
+
+import React from 'react'
+
+/**
+ * Interface: CourseCardProps
+ * Purpose: Props for CourseCard component.
+ */
+interface CourseCardProps {
+  id: string
+  title: string
+  instructor: string
+  thumbnail?: string
+  progress?: number
+  onOpen: (id: string) => void
+}
+
+/**
+ * Component: CourseCard
+ * Purpose: A compact visual card representing a course.
+ */
+const CourseCard: React.FC<CourseCardProps> = ({ id, title, instructor, thumbnail, progress = 0, onOpen }) => {
+  return (
+    <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+      <div className="relative h-36">
+        <img src={thumbnail || 'https://pub-cdn.sider.ai/u/U04XHG17YK9/web-coder/6a56f1c0133e583efe8d88fd/resource/5debf073-c4c0-4668-8e7f-f900acfb86f1.jpg'} alt={title} className="object-cover w-full h-full" />
+        <div className="absolute right-3 top-3 bg-white/90 px-3 py-1 rounded-full text-xs font-medium">
+          {Math.round(progress)}%
+        </div>
+      </div>
+      <div className="p-4">
+        <h3 className="font-semibold text-sm">{title}</h3>
+        <p className="text-xs text-slate-500 mt-1">By {instructor}</p>
+        <div className="mt-3 flex items-center justify-between">
+          <button onClick={() => onOpen(id)} className="text-sm bg-indigo-600 text-white px-3 py-1 rounded">
+            Continue
+          </button>
+          <button className="text-xs text-slate-500">Details</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default CourseCard

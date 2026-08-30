@@ -1,0 +1,38 @@
+/** 
+ * File: Header.tsx
+ * Purpose: Top navigation bar for the learning platform.
+ */
+
+import React from 'react'
+import { BookOpen, Users } from 'lucide-react'
+
+/**
+ * Component: Header
+ * Purpose: Displays brand, simple navigation and user actions.
+ */
+const Header: React.FC = () => {
+  return (
+    <header className="flex items-center justify-between px-6 py-4 bg-white border-b shadow-sm">
+      <div className="flex items-center gap-3">
+        <div className="rounded-md bg-indigo-600 text-white p-2 flex items-center justify-center">
+          <BookOpen size={20} />
+        </div>
+        <div>
+          <h1 className="text-lg font-semibold">Aurora Learn</h1>
+          <p className="text-xs text-slate-500">Modern online learning</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-4">
+        <button className="text-sm px-3 py-1 rounded-md hover:bg-slate-50">Browse</button>
+        <button className="text-sm px-3 py-1 rounded-md hover:bg-slate-50 flex items-center gap-2">
+          <Users size={16} /> Community
+        </button>
+        <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-medium">
+          U
+        </div>
+      </div>
+    </header>
+  )
+}
+
+export default Header
