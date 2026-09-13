@@ -19,8 +19,15 @@ const HTML_ESCAPE: Record<string, string> = {
  */
 export function sanitizeInput(input: string): string {
   if (typeof input !== 'string') return '';
-  return input
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+
+  let sanitized = input;
+  let previous: string;
+  do {
+    previous = sanitized;
+    sanitized = sanitized.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
+  } while (sanitized !== previous);
+
+  return sanitized
     .replace(/[&<>"']/g, (m) => HTML_ESCAPE[m] ?? m)
     .trim()
     .slice(0, MAX_INPUT_LENGTH);
