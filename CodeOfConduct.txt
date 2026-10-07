@@ -1,0 +1,161 @@
+Here is a review of your draft, followed by comprehensive "Full Versions" in both English and Thai. 
+
+### 🔍 Review of Your Draft
+
+Your draft is **excellent, concise, and easy to read**. The use of emojis and short bullet points makes it very accessible. However, there are a few critical areas that need adjustment for a professional open-source or community project:
+
+1. **Critical Flaw in Reporting:** You suggested reporting via *"GitHub Issues (if appropriate)"*. **Never use public GitHub Issues to report harassment or abuse.** This exposes the victim and violates their privacy. Reporting must be done via a private, direct channel (like a dedicated email address).
+2. **Attribution Mismatch:** You stated it is adapted from *Contributor Covenant v2.1*. However, the text you wrote is a heavily summarized version, not the actual CC v2.1 text. The actual CC v2.1 includes specific "Enforcement Guidelines" (a consequence ladder) and a "Scope" section. 
+3. **Missing Scope:** It doesn't explicitly state *where* the rules apply (e.g., does it apply to Discord? Twitter? Real-life meetups?).
+4. **Contribution Standards:** This is a great addition that many standard CoCs miss! I have kept this in the full versions.
+
+Below are the **Full Versions** that fix these issues, expand on the enforcement guidelines (using the standard Contributor Covenant framework), and maintain your excellent contribution standards.
+
+***
+
+### 🇬🇧 Full Version (English)
+
+# Code of Conduct
+
+## ✨ Our Pledge
+We as members, contributors, and leaders pledge to make participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, caste, color, religion, or sexual identity and orientation.
+
+We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.
+
+## 🤝 Our Standards
+Examples of behavior that contributes to a positive environment for our community include:
+* Demonstrating empathy and kindness toward other people
+* Being respectful of differing opinions, viewpoints, and experiences
+* Giving and gracefully accepting constructive feedback
+* Accepting responsibility and apologizing to those affected by our mistakes, and learning from the experience
+* Focusing on what is best not just for us as individuals, but for the overall community
+
+Examples of unacceptable behavior include:
+* The use of sexualized language or imagery, and sexual attention or advances of any kind
+* Trolling, insulting or derogatory comments, and personal or political attacks
+* Public or private harassment
+* Publishing others' private information, such as a physical or email address, without their explicit permission
+* Deliberate sabotage of code, CI/CD pipelines, or project workflows
+* Other conduct which could reasonably be considered inappropriate in a professional setting
+
+## 🧠 Contribution Standards
+To maintain code quality, consistency, and a smooth review process, all contributors are expected to:
+* Follow existing project structure, coding styles, and conventions.
+* Write clear, descriptive commit messages (we prefer [Conventional Commits](https://www.conventionalcommits.org/)).
+* Ensure all CI/CD checks and tests pass before requesting a review.
+* Keep Pull Requests focused, minimal in scope, and clearly described.
+* Be patient and responsive during the code review process.
+
+## 📌 Scope
+This Code of Conduct applies within all project spaces (such as GitHub repositories, discussions, and wikis), and also applies when an individual is officially representing the community in public spaces. Examples of representing our community include using an official e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event.
+
+## ⚙️ Enforcement Responsibilities
+Project maintainers are responsible for clarifying and enforcing our standards of acceptable behavior and will take appropriate and fair corrective action in response to any behavior that they deem inappropriate, threatening, offensive, or harmful.
+
+Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, and will communicate reasons for moderation decisions when appropriate.
+
+## 🛡️ Enforcement Guidelines
+Community leaders will follow these Community Impact Guidelines in determining the consequences for any action they deem in violation of this Code of Conduct:
+
+**1. Correction**
+* **Community Impact:** Use of inappropriate language or other behavior deemed unprofessional or unwelcome.
+* **Consequence:** A private, written warning from community leaders, providing clarity around the nature of the violation and an explanation of why the behavior was inappropriate. A public apology may be requested.
+
+**2. Warning**
+* **Community Impact:** A violation through a single incident or series of actions.
+* **Consequence:** A warning with consequences for continued behavior. No interaction with the people involved, including unsolicited interaction with those enforcing the Code of Conduct, for a specified period of time. This includes avoiding interactions in community spaces as well as external channels like social media. Violating these terms may lead to a temporary or permanent ban.
+
+**3. Temporary Ban**
+* **Community Impact:** A serious violation of community standards, including sustained inappropriate behavior.
+* **Consequence:** A temporary ban from any sort of interaction or public communication with the community for a specified period of time. No public or private interaction with the people involved, including unsolicited interaction with those enforcing the Code of Conduct, is allowed during this period. Violating these terms may lead to a permanent ban.
+
+**4. Permanent Ban**
+* **Community Impact:** Demonstrating a pattern of violation of community standards, including sustained inappropriate behavior, harassment of an individual, or aggression toward or disparagement of classes of individuals.
+* **Consequence:** A permanent ban from any sort of public interaction within the community.
+
+## 📬 Reporting Guidelines
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement at **[INSERT DEDICATED EMAIL ADDRESS, e.g., conduct@yourproject.com]**. 
+
+**All complaints will be reviewed and investigated promptly and fairly.** All community leaders are obligated to respect the privacy and security of the reporter of any incident. *Please do not report abuse via public GitHub Issues.*
+
+## 🌱 Philosophy
+This project grows through collaboration, experimentation, and respect. We believe that great software is built by great, inclusive communities.
+
+## 📌 Attribution
+This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org/), version 2.1, available at [https://www.contributor-covenant.org/version/2/1/code_of_conduct.html](https://www.contributor-covenant.org/version/2/1/code_of_conduct.html).
+
+***
+
+### 🇹🇭 Full Version (Thai)
+
+# ข้อกำหนดพฤติกรรม (Code of Conduct)
+
+## ✨ คำมั่นสัญญาของเรา
+เราในฐานะสมาชิก ผู้มีส่วนร่วม และผู้นำ ขอปฏิญาณว่าจะทำให้การเข้าร่วมในโปรเจกต์และชุมชนของเรา เป็นประสบการณ์ที่ปราศจากการล่วงละเมิดสำหรับทุกคน โดยไม่แบ่งแยกอายุ รูปร่าง ขนาด ความพิการที่มองเห็นหรือไม่มองเห็น เชื้อชาติ ลักษณะทางเพศ อัตลักษณ์และการแสดงออกทางเพศ ระดับประสบการณ์ การศึกษา สถานะทางสังคมและเศรษฐกิจ สัญชาติ รูปลักษณ์ภายนอก เชื้อชาติ วรรณะ สีผิว ศาสนา หรืออัตลักษณ์และการวางแนวทางการแสดงออกทางเพศ
+
+เราขอปฏิญาณว่าจะกระทำและปฏิสัมพันธ์กันในวิธีที่ส่งเสริมให้ชุมชนเปิดกว้าง เป็นกันเอง มีความหลากหลาย ครอบคลุม และมีสุขภาพดี
+
+## 🤝 มาตรฐานของเรา
+ตัวอย่างพฤติกรรมที่ช่วยสร้างสิ่งแวดล้อมเชิงบวกให้กับชุมชนของเรา ได้แก่:
+* แสดงความเข้าอกเข้าใจและความเมตตาต่อผู้อื่น
+* เคารพในความคิดเห็น มุมมอง และประสบการณ์ที่แตกต่าง
+* ให้และยอมรับคำติชมเชิงสร้างสรรค์อย่างสุภาพ
+* ยอมรับความรับผิดชอบ ขออภัยผู้ที่ได้รับผลกระทบจากข้อผิดพลาดของเรา และเรียนรู้จากประสบการณ์
+* มุ่งเน้นในสิ่งที่ดีที่สุดสำหรับชุมชนโดยรวม ไม่ใช่แค่สำหรับตัวเราเอง
+
+ตัวอย่างพฤติกรรมที่ยอมรับไม่ได้ ได้แก่:
+* การใช้ภาษาหรือรูปภาพที่มีเนื้อหาทางเพศ และการให้ความสนใจหรือเกี้ยวพาราสีทางเพศในทุกกรณี
+* การก่อกวน (Trolling) การแสดงความคิดเห็นที่ดูหมิ่นหรือลดทอนคุณค่า และการโจมตีส่วนบุคคลหรือทางการเมือง
+* การล่วงละเมิดในที่สาธารณะหรือส่วนตัว
+* การเปิดเผยข้อมูลส่วนตัวของผู้อื่น เช่น ที่อยู่ทางกายภาพหรืออีเมล โดยไม่ได้รับอนุญาตอย่างชัดแจ้ง
+* การจงใจทำลายโค้ด ระบบ CI/CD หรือเวิร์กโฟลว์ของโปรเจกต์
+* พฤติกรรมอื่นๆ ที่อาจถือว่าไม่เหมาะสมในสภาพแวดล้อมระดับมืออาชีพ
+
+## 🧠 มาตรฐานการมีส่วนร่วม (Contribution Standards)
+เพื่อรักษาคุณภาพโค้ด ความสอดคล้อง และกระบวนการรีวิวที่ราบรื่น ผู้มีส่วนร่วมทุกคนควรปฏิบัติตาม:
+* ปฏิบัติตามโครงสร้าง รูปแบบการเขียนโค้ด และข้อตกลงที่มีอยู่ในโปรเจกต์
+* เขียนข้อความ commit ที่ชัดเจนและอธิบายได้ดี (เราแนะนำให้ใช้ [Conventional Commits](https://www.conventionalcommits.org/))
+* ตรวจสอบให้แน่ใจว่าการตรวจสอบ CI/CD และเทสต์ทั้งหมดผ่านก่อนขอรีวิว
+* ทำให้ Pull Request มีจุดประสงค์ชัดเจน ครอบคลุมเฉพาะสิ่งที่จำเป็น และมีการอธิบายที่เข้าใจง่าย
+* มีความอดทนและตอบสนองต่อคำติชมระหว่างกระบวนการรีวิวโค้ด
+
+## 📌 ขอบเขตการใช้งาน
+ข้อกำหนดพฤติกรรมนี้บังคับใช้ในพื้นที่ทั้งหมดของโปรเจกต์ (เช่น GitHub repositories, Discussions และ Wikis) และบังคับใช้เมื่อบุคคลนั้นเป็นตัวแทนของชุมชนอย่างเป็นทางการในที่สาธารณะ ตัวอย่างของการเป็นตัวแทนชุมชน ได้แก่ การใช้ที่อยู่อีเมลทางการ การโพสต์ผ่านบัญชีโซเชียลมีเดียทางการ หรือการทำหน้าที่เป็นตัวแทนที่ได้รับมอบหมายในงานออนไลน์หรือออฟไลน์
+
+## ⚙️ บทบาทและหน้าที่ในการบังคับใช้
+ผู้ดูแลโปรเจกต์ (Maintainers) มีหน้าที่ในการชี้แจงและบังคับใช้มาตรฐานของพฤติกรรมที่ยอมรับได้ และจะดำเนินการแก้ไขที่เหมาะสมและเป็นธรรมต่อการกระทำใดๆ ที่เห็นว่าไม่เหมาะสม ข่มขู่ ล่อแหลม หรือเป็นอันตราย
+
+ผู้ดูแลโปรเจกต์มีสิทธิ์และหน้าที่ในการลบ แก้ไข หรือปฏิเสธความคิดเห็น, commits, โค้ด, การแก้ไข wiki, issues และการมีส่วนร่วมอื่นๆ ที่ไม่สอดคล้องกับข้อกำหนดพฤติกรรมนี้ และจะสื่อสารเหตุผลของการตัดสินใจดูแลเมื่อเหมาะสม
+
+## 🛡️ แนวทางการบังคับใช้
+ผู้นำชุมชนจะปฏิบัติตามแนวทางการผลกระทบต่อชุมชนนี้ เพื่อพิจารณาผลที่จะตามมาสำหรับการกระทำใดๆ ที่ถือว่าละเมิดข้อกำหนดพฤติกรรมนี้:
+
+**1. การตักเตือนและการแก้ไข (Correction)**
+* **ผลกระทบต่อชุมชน:** การใช้ภาษาที่ไม่เหมาะสมหรือพฤติกรรมอื่นที่ถือว่าไม่เป็นมืออาชีพหรือไม่เป็นที่ต้อนรับ
+* **ผลที่จะตามมา:** คำเตือนเป็นลายลักษณ์อักษรแบบส่วนตัวจากผู้นำชุมชน โดยระบุรายละเอียดเกี่ยวกับการละเมิดและอธิบายว่าเหตุใดพฤติกรรมนั้นจึงไม่เหมาะสม อาจมีการขอให้ขอโทษต่อสาธารณะ
+
+**2. การเตือน (Warning)**
+* **ผลกระทบต่อชุมชน:** การละเมิดผ่านเหตุการณ์เดียวหรือการกระทำหลายครั้งต่อเนื่อง
+* **ผลที่จะตามมา:** คำเตือนพร้อมผลที่จะตามมาหากยังทำอีก ห้ามปฏิสัมพันธ์กับบุคคลที่เกี่ยวข้อง (รวมถึงการปฏิสัมพันธ์ที่ไม่ได้ร้องขอกับผู้ที่บังคับใช้ข้อกำหนด) เป็นระยะเวลาที่กำหนด ซึ่งรวมถึงการหลีกเลี่ยงการปฏิสัมพันธ์ในพื้นที่ชุมชนและช่องทางภายนอก เช่น โซเชียลมีเดีย การละเมิดเงื่อนไขเหล่านี้อาจนำไปสู่การระงับสิทธิ์ชั่วคราวหรือถาวร
+
+**3. การระงับสิทธิ์ชั่วคราว (Temporary Ban)**
+* **ผลกระทบต่อชุมชน:** การละเมิดมาตรฐานของชุมชนอย่างร้ายแรง รวมถึงพฤติกรรมที่ไม่เหมาะสมอย่างต่อเนื่อง
+* **ผลที่จะตามมา:** การระงับสิทธิ์จากการปฏิสัมพันธ์หรือการสื่อสารสาธารณะใดๆ กับชุมชนเป็นระยะเวลาที่กำหนด ห้ามการปฏิสัมพันธ์แบบสาธารณะหรือส่วนตัวกับบุคคลที่เกี่ยวข้อง โดยเด็ดขาดในช่วงเวลานี้ การละเมิดเงื่อนไขเหล่านี้อาจนำไปสู่การระงับสิทธิ์ถาวร
+
+**4. การระงับสิทธิ์ถาวร (Permanent Ban)**
+* **ผลกระทบต่อชุมชน:** การแสดงรูปแบบการละเมิดมาตรฐานของชุมชนอย่างต่อเนื่อง รวมถึงพฤติกรรมที่ไม่เหมาะสมอย่างต่อเนื่อง การล่วงละเมิดบุคคล หรือการรุกราน/ดูหมิ่นกลุ่มบุคคลใดกลุ่มบุคคลหนึ่ง
+* **ผลที่จะตามมา:** การระงับสิทธิ์ถาวรจากการปฏิสัมพันธ์สาธารณะใดๆ ภายในชุมชน
+
+## 📬 แนวทางการรายงานปัญหา
+เหตุการณ์การล่วงละเมิด การก่อกวน หรือพฤติกรรมอื่นๆ ที่ยอมรับไม่ได้ สามารถรายงานไปยังผู้นำชุมชนที่รับผิดชอบการบังคับใช้ได้ที่ **[ใส่อีเมลสำหรับรับเรื่อง เช่น conduct@yourproject.com]**
+
+**เรื่องร้องเรียนทั้งหมดจะได้รับการตรวจสอบและสืบสวนอย่างรวดเร็วและเป็นธรรม** ผู้นำชุมชนทุกคนมีหน้าที่ต้องเคารพความเป็นส่วนตัวและความปลอดภัยของผู้รายงานเหตุการณ์ใดๆ *กรุณาอย่ารายงานการล่วงละเมิดผ่าน GitHub Issues สาธารณะ*
+
+## 🌱 ปรัชญาของเรา
+โปรเจกต์นี้เติบโตขึ้นได้ด้วยความร่วมมือ การทดลอง และการเคารพซึ่งกันและกัน เราเชื่อว่าซอฟต์แวร์ที่ยอดเยี่ยมถูกสร้างโดยชุมชนที่ยอดเยี่ยมและครอบคลุม
+
+## 📌 การอ้างอิง
+ข้อกำหนดพฤติกรรมนี้ดัดแปลงมาจาก [Contributor Covenant](https://www.contributor-covenant.org/) เวอร์ชัน 2.1 ซึ่งสามารถดูได้ที่ [https://www.contributor-covenant.org/version/2/1/code_of_conduct.html](https://www.contributor-covenant.org/version/2/1/code_of_conduct.html)
+
+***
+
