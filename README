@@ -58,7 +58,13 @@ new-radix-nova-project/
 ```
 
 ---
-
+✅ Quick Checklist
+ 
+Install dependencies:  pip install pyjwt pydantic-settings redis python-multipart fastapi uvicorn 
+Start Redis server locally or set  REDIS_URL  to your instance
+Generate a secure  JWT_SECRET  (don't use the default!)
+Copy  .env  from example — never commit it to Git
+Add  .env  to your  .gitignore
 ## 🚀 Quick Start
 ```bash
 # 1. Clone
