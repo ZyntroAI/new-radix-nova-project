@@ -1,0 +1,147 @@
+yaml  
+---
+title: "CEL & IAM Conditions — Google Cloud Guide"
+type: "reference"
+status: "active"
+created: "2026-10-26"
+updated: "2026-10-26"
+tags:
+  - google-cloud
+  - iam
+  - cel
+  - security
+  - access-control
+related: []
+description: "สรุปการใช้ CEL ร่วมกับ IAM Conditions และ Access Context Manager ใน Google Cloud"
+---
+ 
+ 
+🔐 CEL + IAM Conditions — Complete Guide
+ 
+ให้สิทธิ์เข้าถึงเฉพาะเมื่อตรงตามเงื่อนไข — เวลา, อุปกรณ์, ตำแหน่ง, ประเภททรัพยากร และแท็ก ✅
+ 
+ 
+ 
+📖 สารบัญ
+ 
+- 🎯 ภาพรวม
+- 📐 วิธีที่ 1: เขียน CEL ตรงใน IAM Condition
+- 🌐 วิธีที่ 2: อ้างอิง Access Level จาก Access Context Manager
+- 🧩 ตัวอย่างนิพจน์ CEL ที่ใช้บ่อย
+- 🔄 รูปแบบการผสานรวมที่แนะนำ
+- ⚠️ ข้อจำกัดสำคัญ
+- 📝 คำสั่ง gcloud
+ 
+ 
+ 
+🎯 ภาพรวม
+ 
+CEL (Common Expression Language) ช่วยให้คุณกำหนดเงื่อนไขได้ยืดหยุ่นในสิทธิ์ IAM โดยมี 2 แนวทางหลัก:
+ 
+แนวทาง ใช้เมื่อไหร่ 
+CEL โดยตรงใน IAM Condition กฎง่ายๆ เฉพาะรายบุคคล/บทบาท — เวลา, ชื่อทรัพยากร, แท็ก 
+อ้างอิง Access Level จาก ACM กฎซับซ้อนที่นำกลับมาใช้ซ้ำได้ — ความปลอดภัยอุปกรณ์, เครือข่าย, ตำแหน่ง 
+ 
+ 
+ 
+📐 วิธีที่ 1: เขียน CEL ตรงใน IAM Condition
+ 
+โครงสร้าง
+ 
+json  
+{
+  "role": "roles/logging.viewer",
+  "members": ["user:contractor@example.com"],
+  "condition": {
+    "title": "Expires_end_of_year",
+    "description": "สิทธิ์เข้าถึงชั่วคราวถึง 31 ธันวาคม 2026",
+    "expression": "request.time < timestamp('2026-12-31T23:59:59Z')"
+  }
+}
+ 
+ 
+⚠️ สำคัญ: ต้องใช้ Policy เวอร์ชัน 3 เสมอเมื่ออ่าน/เขียนนโยบายที่มีเงื่อนไข
+ 
+ 
+ 
+🧩 ตัวอย่างนิพจน์ CEL ที่ใช้บ่อย
+ 
+กรณีการใช้งาน นิพจน์ CEL 
+⏳ สิทธิ์ชั่วคราว  request.time < timestamp('2026-12-31T23:59:59Z')  
+🕐 เวลาทำการ (จันทร์-ศุกร์ 09:00-17:00)  request.time.getDayOfWeek('Asia/Bangkok') >= 1 && request.time.getDayOfWeek('Asia/Bangkok') <= 5 && request.time.getHours('Asia/Bangkok') >= 9 && request.time.getHours('Asia/Bangkok') < 17  
+📊 จำกัดตามชื่อทรัพยากร  resource.name.startsWith('projects/my-project/zones/us-central1-a/instances/dev-')  
+💻 จำกัดตามประเภททรัพยากร  resource.type == 'compute.googleapis.com/Instance'  
+🏷️ ตรวจสอบแท็กทรัพยากร  resource.matchTag('123456789012/env', 'prod')  
+✅ รวมหลายเงื่อนไข  request.time < timestamp('2026-12-31T23:59:59Z') && resource.name.startsWith('projects/my-project/dev-')  
+ 
+ 
+ 
+🌐 วิธีที่ 2: อ้างอิง Access Level จาก Access Context Manager
+ 
+ขั้นตอน
+ 
+1. สร้าง Access Level ใน Access Context Manager (เขียนด้วย CEL)
+2. อ้างอิง ใน IAM Condition ด้วยรูปแบบนี้:
+ 
+cel  
+"accessPolicies/นโยบาย-ID/accessLevels/ชื่อ-Level" in request.auth.access_levels
+ 
+ 
+ตัวอย่าง: อุปกรณ์ต้องเข้ารหัสและผ่าน Intune
+ 
+cel  
+"accessPolicies/123456789012/accessLevels/HighTrustDevice" in request.auth.access_levels
+ 
+ 
+รวมกับเวลาทำการ
+ 
+cel  
+"accessPolicies/123456789012/accessLevels/CorpNetwork" in request.auth.access_levels &&
+request.time.getHours("Asia/Bangkok") >= 8 &&
+request.time.getHours("Asia/Bangkok") < 18
+ 
+ 
+ 
+ 
+⚠️ ข้อจำกัดสำคัญ
+ 
+-  request.auth.access_levels  ทำงานได้ดีที่สุดกับ IAP (Identity-Aware Proxy) เท่านั้น:
+- ✅  iap.webServiceVersions.accessViaIAP 
+- ✅  iap.tunnelInstances.accessViaIAP 
+- สำหรับทรัพยากรทั่วไป (Compute, BigQuery, Storage) → ใช้ Context-Aware Access หรือ CEL ตรง แทน
+ 
+ 
+ 
+🔄 รูปแบบการผสานรวมที่แนะนำ
+ 
+เป้าหมาย แนวทางที่แนะนำ 
+⏳ สิทธิ์ชั่วคราว/จำกัดเวลา CEL ตรง:  request.time  
+📊 จำกัดตามชื่อ/ประเภททรัพยากร CEL ตรง:  resource.name ,  resource.type  
+🏷️ แยกสภาพแวดล้อม (dev/prod) CEL ตรง: แท็กทรัพยากร +  resource.matchTag()  
+🔒 ความปลอดภัยอุปกรณ์/เครือข่าย ACM Access Level + Context-Aware Access 
+🚀 สิทธิ์สำคัญที่ต้องการความมั่นใจสูง Access Level (อุปกรณ์ + เวลา) + IAP 
+ 
+ 
+ 
+📝 คำสั่ง gcloud
+ 
+เพิ่มสิทธิ์แบบมีเงื่อนไข
+ 
+bash  
+gcloud projects add-iam-policy-binding PROJECT_ID \
+  --member="user:alice@example.com" \
+  --role="roles/bigquery.dataViewer" \
+  --condition='expression=request.time < timestamp("2026-12-31T23:59:59Z"),title=expires-2026,description=สิทธิ์ถึงสิ้นปี'
+ 
+ 
+ดูนโยบาย (ระบุเวอร์ชัน 3!)
+ 
+bash  
+gcloud projects get-iam-policy PROJECT_ID --version=3
+ 
+ 
+ 
+ 
+💡 หลักการ: กฎง่าย = CEL ตรงเลย → กฎซับซ้อน/ใช้ซ้ำได้ = สร้าง Access Level ไว้ก่อนแล้วอ้างอิง ✅
+ 
+ต้องการตัวอย่างเฉพาะ BigQuery, Compute Engine, Cloud Storage หรือ Terraform snippet ไหมครับ? 😊
