@@ -1,0 +1,381 @@
+Full ZyntroAI Task Registry Implementation with JSON Schema, CLI, Obsidian and MCP
+✅ Full Implementation: task.json (ZyntroAI Task Registry + Schema + CLI + Obsidian + MCP)
+💡 แยกชัด:
+- .vscode/tasks.json = VS Code runner
+- tasks/task.json (ZyntroAI) = Task Registry / Knowledge‑Driven Task Model สำหรับ automation, Dataview, MCP, chore workflow
+🧩 Part 1: JSON Schema + Sample tasks/task.json
+วางที่ tasks/task.json (registry) + tasks/schema.json สำหรับ validation
+tasks/schema.json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ZyntroAI Task Schema",
+  "type": "object",
+  "required": ["version", "tasks"],
+  "properties": {
+    "version": { "type": "string", "const": "1.0.0" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "status"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^zt-[0-9]{8}-[a-z0-9]{4}$" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["todo", "in_progress", "ready_review", "done", "cancelled"]
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "critical"],
+            "default": "medium"
+          },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "due": { "type": "string", "format": "date", "nullable": true },
+          "assignee": { "type": "string", "nullable": true },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "relatedNotes": { "type": "array", "items": { "type": "string" } },
+          "dependencies": { "type": "array", "items": { "type": "string" } },
+          "automation": {
+            "type": "object",
+            "properties": {
+              "runCommand": { "type": "string", "nullable": true },
+              "cron": { "type": "string", "nullable": true },
+              "autoCreateVaultNote": { "type": "boolean", "default": true }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+tasks/task.json (Sample Registry)
+{
+  "$schema": "./schema.json",
+  "version": "1.0.0",
+  "updatedAt": "2026-10-28T02:00:00+07:00",
+  "tasks": [
+    {
+      "id": "zt-20261028-0001",
+      "title": "Build detect‑secrets Alert Pipeline",
+      "description": "Set detect-secrets baseline + create alert notes in Obsidian",
+      "status": "done",
+      "priority": "high",
+      "createdAt": "2026-10-28T02:00:00+07:00",
+      "updatedAt": "2026-10-28T02:05:00+07:00",
+      "due": "2026-10-28",
+      "assignee": "team",
+      "tags": ["devsecops", "automation"],
+      "relatedNotes": ["[[Repo Validation & Linting]]", "[[Secret Alert Report]]"],
+      "dependencies": [],
+      "automation": {
+        "runCommand": "./scripts/secrets-alert-to-vault.sh",
+        "autoCreateVaultNote": true
+      }
+    },
+    {
+      "id": "zt-20261028-0002",
+      "title": "Create Repo Health Dataview Dashboard",
+      "description": "Build dashboard for CI, security alerts, stale knowledge",
+      "status": "in_progress",
+      "priority": "medium",
+      "createdAt": "2026-10-28T02:00:00+07:00",
+      "updatedAt": "2026-10-28T02:05:00+07:00",
+      "due": "2026-10-30",
+      "assignee": "team",
+      "tags": ["dashboard", "repo-health"],
+      "relatedNotes": ["[[Repo Health Dashboard]]"],
+      "dependencies": ["zt-20261028-0001"],
+      "automation": {
+        "autoCreateVaultNote": true
+      }
+    },
+    {
+      "id": "zt-20261028-0003",
+      "title": "Implement Daily Briefing Automation",
+      "description": "Generate daily briefing note from alerts + tasks + repo health",
+      "status": "todo",
+      "priority": "medium",
+      "createdAt": "2026-10-28T02:00:00+07:00",
+      "updatedAt": "2026-10-28T02:00:00+07:00",
+      "due": "2026-11-05",
+      "assignee": "team",
+      "tags": ["briefing", "automation"],
+      "relatedNotes": ["[[Automations Catalog]]"],
+      "dependencies": ["zt-20261028-0002"],
+      "automation": {
+        "cron": "0 9 * * *",
+        "autoCreateVaultNote": true
+      }
+    }
+  ]
+}
+⚠️ VS Code tasks.json (แยกอีกไฟล์ สำหรับ runner)
+.vscode/tasks.json
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "task:validate registry",
+      "type": "shell",
+      "command": "ajv",
+      "args": ["validate", "-s", "tasks/schema.json", "-d", "tasks/task.json"],
+      "group": { "kind": "test", "isDefault": false }
+    },
+    {
+      "label": "task:list todo",
+      "type": "shell",
+      "command": "jq",
+      "args": [".tasks[] | select(.status == \"todo\") | .title", "tasks/task.json"],
+      "group": { "kind": "build", "isDefault": false }
+    }
+  ]
+}
+🧩 Part 2: CLI Script (scripts/zyntro-task.sh) — เชื่อม task.json ↔ Obsidian
+#!/usr/bin/env bash
+set -euo pipefail
+
+VAULT="${ZYNTRO_DOCS_ROOT:-$HOME/vaults/ZyntroAI-Docs}"
+TASK_JSON="tasks/task.json"
+DATE=$(date +%Y-%m-%d)
+
+cmd_validate() {
+  echo "🔍 Validating task.json"
+  ajv validate -s tasks/schema.json -d "$TASK_JSON"
+  echo "✅ Valid"
+}
+
+cmd_list() {
+  local filter="${1:-}"
+  if [ -n "$filter" ]; then
+    jq ".tasks[] | select(.status == \"$filter\") | {id,title,status,due}" "$TASK_JSON"
+  else
+    jq ".tasks[] | {id,title,status,due}" "$TASK_JSON"
+  fi
+}
+
+cmd_export_to_vault() {
+  mkdir -p "$VAULT/Tasks"
+  jq -c '.tasks[]' "$TASK_JSON" | while read -r task; do
+    id=$(echo "$task" | jq -r '.id')
+    title=$(echo "$task" | jq -r '.title')
+    status=$(echo "$task" | jq -r '.status')
+    priority=$(echo "$task" | jq -r '.priority')
+    due=$(echo "$task" | jq -r '.due // ""')
+    related=$(echo "$task" | jq -r '.relatedNotes | join(", ") // ""')
+    note="$VAULT/Tasks/$id.md"
+
+    cat > "$note" <<EOF
+---
+id: $id
+type: task
+status: $status
+priority: $priority
+due: $due
+created: $DATE
+tags: [zyntroai, task]
+related: [$related]
+---
+
+# $title
+
+## Description
+$(echo "$task" | jq -r '.description')
+
+## Automation
+- Command: $(echo "$task" | jq -r '.automation.runCommand // "None"')
+- Cron: $(echo "$task" | jq -r '.automation.cron // "None"')
+
+## Progress
+- [ ] Review
+- [ ] Execute
+- [ ] Update task.json status
+EOF
+    echo "✅ Exported: $note"
+  done
+}
+
+cmd_update_status() {
+  local id="$1"
+  local newStatus="$2"
+  if [ -z "$id" ] || [ -z "$newStatus" ]; then
+    echo "Usage: $0 update-status <id> <todo|in_progress|ready_review|done|cancelled>"
+    exit 1
+  fi
+  jq --arg id "$id" --arg status "$newStatus" --arg time "$(date -Iseconds)" \
+    '.tasks[] |= if .id == $id then .status=$status | .updatedAt=$time else . end | .updatedAt=$time' \
+    "$TASK_JSON" > tmp.json && mv tmp.json "$TASK_JSON"
+  echo "✅ $id → $newStatus"
+}
+
+case "${1:-}" in
+  validate) cmd_validate ;;
+  list) cmd_list "${2:-}" ;;
+  export-vault) cmd_export_to_vault ;;
+  update-status) cmd_update_status "$2" "$3" ;;
+  *)
+    echo "Usage: $0 validate | list [status] | export-vault | update-status <id> <status>"
+    ;;
+esac
+chmod +x scripts/zyntro-task.sh
+alias zyntro-task="./scripts/zyntro-task.sh"
+🧩 Part 3: Obsidian Knowledge + Dataview Dashboard
+Dashboards/Task‑Registry‑Dashboard.md
+---
+id: zk-20261028-task-dashboard
+type: dashboard
+status: active
+version: 1.0.0
+created: 2026-10-28
+tags: [task, registry, dataview, automation]
+related: [[Automations Catalog]], [[Repo Health Dashboard]]
+---
+
+# 📊 Task Registry Dashboard
+> Source: exported from `tasks/task.json` (run `zyntro-task export-vault` periodically)
+
+## 🟢 All Tasks
+```dataview
+TABLE status, priority, due, related
+FROM "Tasks"
+WHERE type = "task"
+SORT due ASC
+🟡 In Progress
+TABLE priority, due
+FROM "Tasks"
+WHERE type = "task" AND status = "in_progress"
+SORT priority DESC
+🔴 Todo Overdue
+TABLE due
+FROM "Tasks"
+WHERE type = "task" AND status = "todo" AND due < date(now())
+SORT due ASC
+📌 Manual Sync Note
+- Run: zyntro-task export-vault → refresh vault
+- Source of truth: tasks/task.json
+- Do NOT overwrite task.json only from Dataview (needs CLI/MCP)
+## 🧩 Part 4: TypeScript / MCP Blueprint (ZyntroAI MCP)
+```typescript
+// src/taskRegistry.ts
+import fs from "fs/promises";
+import { z } from "zod";
+
+const TaskSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string().optional(),
+  status: z.enum(["todo", "in_progress", "ready_review", "done", "cancelled"]),
+  priority: z.enum(["low", "medium", "high", "critical"]).default("medium"),
+  createdAt: z.string().datetime().optional(),
+  updatedAt: z.string().datetime().optional(),
+  due: z.string().date().nullable().optional(),
+  tags: z.array(z.string()).default([]),
+  relatedNotes: z.array(z.string()).default([]),
+  automation: z.object({
+    runCommand: z.string().nullable().optional(),
+    cron: z.string().nullable().optional(),
+    autoCreateVaultNote: z.boolean().default(true)
+  }).default({})
+});
+
+const RegistrySchema = z.object({
+  version: z.literal("1.0.0"),
+  updatedAt: z.string().datetime().optional(),
+  tasks: z.array(TaskSchema)
+});
+
+export async function loadRegistry(path = "tasks/task.json") {
+  const raw = await fs.readFile(path, "utf8");
+  return RegistrySchema.parse(JSON.parse(raw));
+}
+
+export async function saveRegistry(registry: unknown, path = "tasks/task.json") {
+  await fs.writeFile(path, JSON.stringify(registry, null, 2));
+}
+Register to MCP:
+server.registerTool("task_list", {
+  description: "List ZyntroAI tasks from task.json registry",
+  inputSchema: { status: z.string().optional() },
+}, async ({ status }) => {
+  const reg = await loadRegistry();
+  const filtered = status ? reg.tasks.filter(t => t.status === status) : reg.tasks;
+  return { content: [{ type: "text", text: JSON.stringify(filtered, null, 2) }] };
+});
+
+server.registerTool("task_update_status", {
+  description: "Update task status in task.json",
+  inputSchema: { id: z.string(), status: z.enum(["todo", "in_progress", "ready_review", "done", "cancelled"]) },
+}, async ({ id, status }) => {
+  const reg = await loadRegistry();
+  const idx = reg.tasks.findIndex(t => t.id === id);
+  if (idx < 0) throw new Error("Task not found");
+  reg.tasks[idx].status = status;
+  reg.tasks[idx].updatedAt = new Date().toISOString();
+  reg.updatedAt = new Date().toISOString();
+  await saveRegistry(reg);
+  return { content: [{ type: "text", text: `✅ Updated ${id} → ${status}` }] };
+});
+🧩 Part 5: GitHub Actions Validation Hook
+.github/workflows/task-validate.yml
+name: Task Registry Validation
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "tasks/**"
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v6
+      - run: npm install -g ajv-cli jq
+      - run: ajv validate -s tasks/schema.json -d tasks/task.json
+      - run: ./scripts/zyntro-task.sh validate
+🧩 Part 6: Full Workflow Diagram Summary
+Human / MCP → Edit task.json
+  ↓
+CLI Validate → GitHub Actions Validate
+  ↓
+Export → Obsidian Tasks Notes
+  ↓
+Dataview Dashboard visualize
+  ↓
+Automation run (cron / chore)
+  ↓
+Update status → task.json
+  ↓
+Commit → PR → CI → Publish Docs
+⚠️ Guardrails:
+- task.json = Source of Truth (recommended)
+- Obsidian Notes = Mirror / Dashboard view
+- Automation = Draft / Alert / Execute (need approval for risky actions)
+- Not replace Obsidian Tasks inline - [ ] fully
+- VS Code .vscode/tasks.json ≠ this registry
+📂 Folder Tree Full
+ZyntroAI/
+├── tasks/
+│   ├── task.json
+│   ├── schema.json
+│   └── README.md
+├── .vscode/
+│   └── tasks.json
+├── scripts/
+│   └── zyntro-task.sh
+├── .github/
+│   └── workflows/
+│       └── task-validate.yml
+└── ZyntroAI-Docs/
+    ├── Tasks/
+    ├── Dashboards/
+    └── Automations/
+🚀 Next Steps Menu
+✅ Option 1: Integrate this task.json → Daily Briefing Agent (สร้าง briefing จาก task + alerts)
+✅ Option 2: Build task.json ↔ GitHub Issues Sync (read-only / create issue only)
+✅ Option 3: Add dependency‑aware scheduler (รัน chore เมื่อ dependency done)
+✅ Option 4: Convert to Excalidraw Diagram of Task Lifecycle
+✅ Option 5: Extend MCP เพิ่ม task_create, task_export_vault, task_list_overdue
+👉 ต้องการให้ผม เชื่อม task.json นี้เข้ากับ Daily Briefing Agent ตอนนี้ไหมครับ? หรือไปต่อที่ GitHub Issues Sync ก่อน?
