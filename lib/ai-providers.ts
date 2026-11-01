@@ -8,6 +8,13 @@ import { createStreamableValue } from 'ai/rsc';
 // ──────────────────────────────────────
 export type AIModel = 'openai/gpt-4o' | 'openai/gpt-4o-mini' | 'anthropic/claude-3-5-sonnet' | 'google/gemini-2.0-flash';
 
+const ALLOWED_MODELS: ReadonlySet<AIModel> = new Set([
+  'openai/gpt-4o',
+  'openai/gpt-4o-mini',
+  'anthropic/claude-3-5-sonnet',
+  'google/gemini-2.0-flash',
+]);
+
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
@@ -62,6 +69,12 @@ const providers: Record<string, ProviderConfig> = {
 function parseModelString(model: AIModel) {
   const [provider, ...modelParts] = model.split('/');
   return { provider, modelId: modelParts.join('/') };
+}
+
+function assertValidModel(model: string): asserts model is AIModel {
+  if (!ALLOWED_MODELS.has(model as AIModel)) {
+    throw new Error(`Unsupported model: ${model}`);
+  }
 }
 
 function getProvider(model: AIModel): ProviderConfig {
@@ -175,6 +188,7 @@ export async function* chatStream(
   options: ChatOptions = {},
 ): AsyncGenerator<StreamResponse, void, unknown> {
   const model = options.model || getDefaultModel();
+  assertValidModel(model);
   const temperature = options.temperature ?? 0.7;
   const maxTokens = options.maxTokens ?? 1024;
 
