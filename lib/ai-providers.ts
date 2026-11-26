@@ -110,7 +110,9 @@ export async function chatComplete(
   messages: ChatMessage[],
   options: ChatOptions = {},
 ): Promise<string> {
-  const model = options.model || getDefaultModel();
+  const selectedModel = options.model ?? getDefaultModel();
+  assertValidModel(selectedModel);
+  const model: AIModel = selectedModel;
   const temperature = options.temperature ?? 0.7;
   const maxTokens = options.maxTokens ?? 1024;
 
