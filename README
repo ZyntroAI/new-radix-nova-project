@@ -78,6 +78,19 @@ cp .env.example .env
 # 3. Install & Setup
 npm install
 pip install -r requirements.txt
+ติดตั้ง Git LFS
+# ติดตั้งครั้งเดียว
+git lfs install
+
+# บอกประเภทไฟล์ที่ต้องการใช้ LFS
+git lfs track "*.pdf"
+git lfs track "*.docx"
+git lfs track "*.jpg"
+git lfs track "*.png"
+git lfs track "*.xlsx"
+
+# ตรวจสอบ
+git lfs ls-files
 
 # 4. Develop
 npm run dev
