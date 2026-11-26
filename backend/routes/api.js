@@ -1,17 +1,24 @@
-import express from "express";
-import Item from "../models/Item.js";
+const express = require('express');
+const rateLimit = require('express-rate-limit');
 
 const router = express.Router();
 
-router.get("/items", async (req, res) => {
+// ✅ Create rate limiter
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    error: 'Too many requests',
+    message: 'Please try again later.'
+  }
+});
+
+// ✅ Apply to your route
+router.get("/items", apiLimiter, async (req, res) => {
   const items = await Item.find();
   res.json(items);
 });
 
-router.post("/items", async (req, res) => {
-  const newItem = new Item(req.body);
-  await newItem.save();
-  res.json(newItem);
-});
-
-export default router;
+module.exports = router;
