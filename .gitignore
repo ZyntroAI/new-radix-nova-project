@@ -427,3 +427,41 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# ======================================
+# 🔴 ไม่ต้องการเก็บใน GitHub
+# ======================================
+
+# ขนาดใหญ่เกินไป
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+*.exe
+*.dmg
+
+# ไฟล์ชั่วคราว
+*.tmp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ขนาดเกิน 100MB (GitHub Limit)
+# ถ้าจำเป็นต้องเก็บ ให้ใช้ Git LFS แทน
+*.pdf    # เอาออกถ้าต้องการเก็บจริง
+*.docx
+*.xlsx
+*.pptx
+*.jpg
+*.png
+*.mov
+*.mp4
+
+# ยกเว้น: ถ้าต้องการเก็บบางไฟล์ ให้เขียนหน้าด้วย !
+# !documents/reports/*.pdf
+# !documents/images/*.png
+
